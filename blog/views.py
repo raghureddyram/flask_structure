@@ -49,3 +49,16 @@ def add_entry_post():
 def show_entry(id):
     entry = session.query(Entry).get(id)
     return render_template("show_entry.html", entry=entry)
+
+@app.route("/entry/<int:id>/edit", methods=["GET", "POST"])
+def edit_entry(id):
+    entry = session.query(Entry).get(id)
+    if request.method == 'GET':
+        return render_template("edit_entry.html",
+                                entry=entry, title=entry.title,
+                                content=entry.content)
+    else:
+        entry.title = request.form["title"]
+        entry.content = request.form["content"]
+        session.commit()
+        return redirect(url_for('show_entry', id=entry.id))
