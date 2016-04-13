@@ -21,4 +21,7 @@ class Entry(Base):
     content = Column(Text)
     datetime = Column(DateTime, default=datetime.datetime.now)
 
+    # @property
+    #def valid?() this is where you would write methods for the Entry class
+
 Base.metadata.create_all(engine)

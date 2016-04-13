@@ -50,15 +50,26 @@ def show_entry(id):
     entry = session.query(Entry).get(id)
     return render_template("show_entry.html", entry=entry)
 
-@app.route("/entry/<int:id>/edit", methods=["GET", "POST"])
+@app.route("/entry/<int:id>/edit", methods=["GET"])
 def edit_entry(id):
     entry = session.query(Entry).get(id)
+    return render_template("edit_entry.html",
+                            entry=entry)
+
+@app.route("/entry/<int:id>/edit", methods=["POST"])
+def edit_entry_post(id):
+    entry = session.query(Entry).get(id)
+    entry.title = request.form["title"]
+    entry.content = request.form["content"]
+    session.commit()
+    return redirect(url_for('show_entry', id=entry.id))
+
+@app.route("/entry/<int:id>/delete", methods=["GET", "POST"])
+def delete_confirm(id):
+    entry = session.query(Entry).get(id)
     if request.method == 'GET':
-        return render_template("edit_entry.html",
-                                entry=entry, title=entry.title,
-                                content=entry.content)
+        return render_template("delete_confirm.html", id=entry.id)
     else:
-        entry.title = request.form["title"]
-        entry.content = request.form["content"]
+        session.delete(entry)
         session.commit()
-        return redirect(url_for('show_entry', id=entry.id))
+        return redirect(url_for('entries'))

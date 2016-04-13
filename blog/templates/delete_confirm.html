@@ -1,0 +1,15 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+{% block content %}
+
+<ul>
+  <form method="post" action="{{ url_for('delete_confirm', id=id) }}">
+    <button type="submit">Delete</button>
+  </form>
+
+  <li class="Cancel">
+    <a href="{{ url_for('entries') }}">&rarr; Cancel</a>
+  </li>
+</ul>
+
+{% endblock %}
